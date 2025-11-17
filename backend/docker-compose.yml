@@ -1,0 +1,13 @@
+services:
+  postgres:
+    image: postgres:latest
+    restart: always
+    environment:
+      POSTGRES_USER: ${DATABASE_USER:-development}
+      POSTGRES_DB: ${DATABASE_NAME:-healthflow}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD:-testing}
+    ports:
+      - '${DATABASE_PORT:-5432}:5432'
+
+volumes:
+  postgres_data:
