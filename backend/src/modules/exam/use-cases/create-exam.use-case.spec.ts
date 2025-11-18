@@ -15,7 +15,7 @@ describe('CreateExamUseCase', () => {
     };
 
     const mockRabbitMQService = {
-      publishExamId: jest.fn(),
+      publish: jest.fn(),
     };
 
     const app: TestingModule = await Test.createTestingModule({
@@ -54,7 +54,7 @@ describe('CreateExamUseCase', () => {
       };
 
       jest.spyOn(examService, 'create').mockResolvedValue(createdExam);
-      jest.spyOn(rabbitMQService, 'publishExamId').mockResolvedValue();
+      jest.spyOn(rabbitMQService, 'publish').mockResolvedValue();
 
       const result = await createExamUseCase.execute(attendantId);
 
@@ -82,14 +82,15 @@ describe('CreateExamUseCase', () => {
       };
 
       jest.spyOn(examService, 'create').mockResolvedValue(createdExam);
-      jest.spyOn(rabbitMQService, 'publishExamId').mockResolvedValue();
+      jest.spyOn(rabbitMQService, 'publish').mockResolvedValue();
 
       await createExamUseCase.execute(attendantId);
 
-      expect(rabbitMQService.publishExamId).toHaveBeenCalledWith(
-        createdExam.id,
+      expect(rabbitMQService.publish).toHaveBeenCalledWith(
+        'exam_processing_queue',
+        { examId: createdExam.id },
       );
-      expect(rabbitMQService.publishExamId).toHaveBeenCalledTimes(1);
+      expect(rabbitMQService.publish).toHaveBeenCalledTimes(1);
     });
   });
 });
