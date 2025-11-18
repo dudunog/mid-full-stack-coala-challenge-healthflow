@@ -1,14 +1,20 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { ExamController } from './exam.controller';
 import { CreateExamUseCase } from './use-cases/create-exam.use-case';
+import { CreateReportUseCase } from './use-cases/create-report.use-case';
 import { Role, ExamStatus } from '@prisma/client';
 
 describe('ExamController', () => {
   let examController: ExamController;
   let createExamUseCase: CreateExamUseCase;
+  let createReportUseCase: CreateReportUseCase;
 
   beforeEach(async () => {
     const mockCreateExamUseCase = {
+      execute: jest.fn(),
+    };
+
+    const mockCreateReportUseCase = {
       execute: jest.fn(),
     };
 
@@ -19,11 +25,16 @@ describe('ExamController', () => {
           provide: CreateExamUseCase,
           useValue: mockCreateExamUseCase,
         },
+        {
+          provide: CreateReportUseCase,
+          useValue: mockCreateReportUseCase,
+        },
       ],
     }).compile();
 
     examController = module.get<ExamController>(ExamController);
     createExamUseCase = module.get<CreateExamUseCase>(CreateExamUseCase);
+    createReportUseCase = module.get<CreateReportUseCase>(CreateReportUseCase);
   });
 
   describe('upload', () => {
@@ -50,6 +61,36 @@ describe('ExamController', () => {
       const result = await examController.upload(user);
 
       expect(createExamUseCase.execute).toHaveBeenCalledWith(user.id);
+      expect(result).toEqual(expectedResult);
+    });
+  });
+
+  describe('submitReport', () => {
+    it('should submit a report for an exam', async () => {
+      const examId = 'exam-1';
+      const createReportDto = {
+        report: 'Exam report content',
+      };
+      const expectedResult = {
+        id: examId,
+        status: ExamStatus.REPORTED,
+        processingResult: 'Processing completed',
+        report: createReportDto.report,
+        attendantId: 'attendant-1',
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      };
+
+      jest
+        .spyOn(createReportUseCase, 'execute')
+        .mockResolvedValue(expectedResult);
+
+      const result = await examController.submitReport(examId, createReportDto);
+
+      expect(createReportUseCase.execute).toHaveBeenCalledWith(
+        examId,
+        createReportDto,
+      );
       expect(result).toEqual(expectedResult);
     });
   });
