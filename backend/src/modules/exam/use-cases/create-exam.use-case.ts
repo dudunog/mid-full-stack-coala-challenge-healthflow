@@ -5,6 +5,8 @@ import { RabbitMQService } from 'src/modules/exam/services/rabbitmq.service';
 
 @Injectable()
 export class CreateExamUseCase {
+  private readonly queueName = 'exam_processing_queue';
+
   constructor(
     private readonly examService: ExamService,
     private readonly rabbitMQService: RabbitMQService,
@@ -20,7 +22,7 @@ export class CreateExamUseCase {
       },
     });
 
-    await this.rabbitMQService.publishExamId(exam.id);
+    await this.rabbitMQService.publish(this.queueName, { examId: exam.id });
 
     return exam;
   }

@@ -12,12 +12,13 @@ export class RabbitMQService implements OnModuleInit, OnModuleDestroy {
   private readonly logger = new Logger(RabbitMQService.name);
   private connection: amqp.ChannelModel | null = null;
   private channel: amqp.ConfirmChannel | null = null;
-  private readonly defaultQueueName = 'exam_processing_queue';
+  private connectionPromise: Promise<void> | null = null;
 
   constructor(private readonly configService: ConfigService) {}
 
   async onModuleInit(): Promise<void> {
-    await this.connect();
+    this.connectionPromise = this.connect();
+    await this.connectionPromise;
   }
 
   async onModuleDestroy(): Promise<void> {
@@ -63,6 +64,17 @@ export class RabbitMQService implements OnModuleInit, OnModuleDestroy {
     return this.channel;
   }
 
+  async waitForConnection(): Promise<void> {
+    if (this.channel) {
+      return;
+    }
+    if (this.connectionPromise) {
+      await this.connectionPromise;
+      return;
+    }
+    throw new Error('RabbitMQ connection not initialized');
+  }
+
   async assertQueue(
     queueName: string,
     options?: amqp.Options.AssertQueue,
@@ -102,13 +114,6 @@ export class RabbitMQService implements OnModuleInit, OnModuleDestroy {
       );
       throw error;
     }
-  }
-
-  async publishExamId(examId: string): Promise<void> {
-    await this.publish(this.defaultQueueName, { examId });
-    this.logger.log(
-      `Published exam ID ${examId} to queue ${this.defaultQueueName}`,
-    );
   }
 
   async consume(
