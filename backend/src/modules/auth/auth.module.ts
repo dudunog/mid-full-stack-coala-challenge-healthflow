@@ -7,10 +7,11 @@ import { LoginUseCase } from './use-cases/login.use-case';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { RolesGuard } from './guards/roles.guard';
-import { UserModule } from '../user/user.module';
+import { UserModule } from 'src/modules/user/user.module';
 
 @Module({
   imports: [
+    ConfigModule,
     UserModule,
     PassportModule,
     JwtModule.registerAsync({
