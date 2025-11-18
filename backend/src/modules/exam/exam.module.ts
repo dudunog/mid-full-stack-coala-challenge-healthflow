@@ -7,6 +7,7 @@ import { CreateReportUseCase } from './use-cases/create-report.use-case';
 import { ListExamsUseCase } from './use-cases/list-exams.use-case';
 import { RabbitMQService } from './services/rabbitmq.service';
 import { ExamConsumer } from './consumers/exam.consumer';
+import { ExamDLQConsumer } from './consumers/exam-dlq.consumer';
 import { DatabaseModule } from '../database/database.module';
 
 @Module({
@@ -19,6 +20,7 @@ import { DatabaseModule } from '../database/database.module';
     ListExamsUseCase,
     RabbitMQService,
     ExamConsumer,
+    ExamDLQConsumer,
   ],
   exports: [ExamService],
 })

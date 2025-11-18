@@ -35,6 +35,7 @@ export class ExamController {
   }
 
   @Get()
+  @Roles(Role.ATTENDANT, Role.DOCTOR)
   async list(@CurrentUser() user: CurrentUserPayload) {
     return this.listExamsUseCase.execute(user.role);
   }

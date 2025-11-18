@@ -1,10 +1,10 @@
+import { Role } from '@prisma/client';
 import { Test, TestingModule } from '@nestjs/testing';
 import { UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { LoginUseCase } from './login.use-case';
-import { UserService } from '../../user/user.service';
-import { LoginDto } from '../dtos/login.dto';
-import { Role } from '@prisma/client';
+import { UserService } from 'src/modules/user/user.service';
+import { LoginDto } from 'src/modules/auth/dtos/login.dto';
 import * as bcrypt from 'bcrypt';
 
 jest.mock('bcrypt', () => ({

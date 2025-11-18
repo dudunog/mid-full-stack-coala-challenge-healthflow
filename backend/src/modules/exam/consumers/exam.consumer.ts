@@ -11,6 +11,7 @@ type ExamProcessingMessage = {
 export class ExamConsumer implements OnModuleInit {
   private readonly logger = new Logger(ExamConsumer.name);
   private readonly queueName = 'exam_processing_queue';
+  private readonly dlqName = 'exam_processing_queue_dlq';
 
   constructor(
     private readonly examService: ExamService,
@@ -28,6 +29,7 @@ export class ExamConsumer implements OnModuleInit {
       async (message: ExamProcessingMessage) => {
         await this.processExam(message);
       },
+      { dlqName: this.dlqName },
     );
   }
 

@@ -1,8 +1,7 @@
 import { ConflictException, Injectable } from '@nestjs/common';
+import { UserService } from 'src/modules/user/user.service';
+import { CreateUserDto } from 'src/modules/user/dtos/create-user.dto';
 import * as bcrypt from 'bcrypt';
-
-import { UserService } from '../user.service';
-import { CreateUserDto } from '../dtos/create-user.dto';
 
 const SALT_ROUNDS = 10;
 

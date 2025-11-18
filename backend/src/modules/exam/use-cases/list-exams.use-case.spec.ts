@@ -1,7 +1,7 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { ListExamsUseCase } from './list-exams.use-case';
-import { ExamService } from 'src/modules/exam/exam.service';
 import { Role, ExamStatus } from '@prisma/client';
+import { Test, TestingModule } from '@nestjs/testing';
+import { ExamService } from 'src/modules/exam/exam.service';
+import { ListExamsUseCase } from './list-exams.use-case';
 
 describe('ListExamsUseCase', () => {
   let listExamsUseCase: ListExamsUseCase;

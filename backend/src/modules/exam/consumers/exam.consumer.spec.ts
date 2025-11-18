@@ -1,8 +1,8 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { ExamConsumer } from './exam.consumer';
-import { ExamService } from '../exam.service';
-import { RabbitMQService } from '../services/rabbitmq.service';
 import { ExamStatus } from '@prisma/client';
+import { Test, TestingModule } from '@nestjs/testing';
+import { ExamService } from 'src/modules/exam/exam.service';
+import { RabbitMQService } from 'src/modules/exam/services/rabbitmq.service';
+import { ExamConsumer } from './exam.consumer';
 
 describe('ExamConsumer', () => {
   let examConsumer: ExamConsumer;
@@ -51,6 +51,7 @@ describe('ExamConsumer', () => {
       expect(rabbitMQService.consume).toHaveBeenCalledWith(
         'exam_processing_queue',
         expect.any(Function) as (message: unknown) => Promise<void>,
+        { dlqName: 'exam_processing_queue_dlq' },
       );
     });
   });

@@ -86,6 +86,22 @@ export class RabbitMQService implements OnModuleInit, OnModuleDestroy {
     });
   }
 
+  async assertQueueWithDLQ(queueName: string, dlqName: string): Promise<void> {
+    const channel = this.ensureChannel();
+
+    await channel.assertQueue(dlqName, {
+      durable: true,
+    });
+
+    await channel.assertQueue(queueName, {
+      durable: true,
+      deadLetterExchange: '',
+      deadLetterRoutingKey: dlqName,
+    });
+
+    this.logger.log(`Queue ${queueName} configured with DLQ ${dlqName}`);
+  }
+
   async publish(
     queueName: string,
     message: unknown,
@@ -119,12 +135,18 @@ export class RabbitMQService implements OnModuleInit, OnModuleDestroy {
   async consume(
     queueName: string,
     callback: (message: unknown) => Promise<void>,
-    options?: amqp.Options.Consume,
+    options?: amqp.Options.Consume & { dlqName?: string },
   ): Promise<void> {
     const channel = this.ensureChannel();
 
     try {
-      await this.assertQueue(queueName);
+      const { dlqName, ...consumeOptions } = options || {};
+
+      if (dlqName) {
+        await this.assertQueueWithDLQ(queueName, dlqName);
+      } else {
+        await this.assertQueue(queueName);
+      }
 
       await channel.consume(
         queueName,
@@ -147,7 +169,7 @@ export class RabbitMQService implements OnModuleInit, OnModuleDestroy {
         },
         {
           noAck: false,
-          ...options,
+          ...consumeOptions,
         },
       );
 

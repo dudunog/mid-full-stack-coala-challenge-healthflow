@@ -1,9 +1,9 @@
+import { Role } from '@prisma/client';
 import { Test, TestingModule } from '@nestjs/testing';
 import { ConflictException } from '@nestjs/common';
+import { UserService } from 'src/modules/user/user.service';
+import { CreateUserDto } from 'src/modules/user/dtos/create-user.dto';
 import { CreateUserUseCase } from './create-user.use-case';
-import { UserService } from '../user.service';
-import { CreateUserDto } from '../dtos/create-user.dto';
-import { Role } from '@prisma/client';
 
 jest.mock('bcrypt', () => ({
   hash: jest.fn(),
