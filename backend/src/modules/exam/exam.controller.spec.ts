@@ -2,12 +2,14 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { ExamController } from './exam.controller';
 import { CreateExamUseCase } from './use-cases/create-exam.use-case';
 import { CreateReportUseCase } from './use-cases/create-report.use-case';
+import { ListExamsUseCase } from './use-cases/list-exams.use-case';
 import { Role, ExamStatus } from '@prisma/client';
 
 describe('ExamController', () => {
   let examController: ExamController;
   let createExamUseCase: CreateExamUseCase;
   let createReportUseCase: CreateReportUseCase;
+  let listExamsUseCase: ListExamsUseCase;
 
   beforeEach(async () => {
     const mockCreateExamUseCase = {
@@ -15,6 +17,10 @@ describe('ExamController', () => {
     };
 
     const mockCreateReportUseCase = {
+      execute: jest.fn(),
+    };
+
+    const mockListExamsUseCase = {
       execute: jest.fn(),
     };
 
@@ -29,12 +35,17 @@ describe('ExamController', () => {
           provide: CreateReportUseCase,
           useValue: mockCreateReportUseCase,
         },
+        {
+          provide: ListExamsUseCase,
+          useValue: mockListExamsUseCase,
+        },
       ],
     }).compile();
 
     examController = module.get<ExamController>(ExamController);
     createExamUseCase = module.get<CreateExamUseCase>(CreateExamUseCase);
     createReportUseCase = module.get<CreateReportUseCase>(CreateReportUseCase);
+    listExamsUseCase = module.get<ListExamsUseCase>(ListExamsUseCase);
   });
 
   describe('upload', () => {
@@ -92,6 +103,34 @@ describe('ExamController', () => {
         createReportDto,
       );
       expect(result).toEqual(expectedResult);
+    });
+  });
+
+  describe('list', () => {
+    it('should list exams', async () => {
+      const user = {
+        id: '1',
+        email: 'attendant@test.com',
+        role: Role.ATTENDANT,
+      };
+      const expectedExams = [
+        {
+          id: 'exam-1',
+          status: ExamStatus.DONE,
+          processingResult: 'Processing completed',
+          report: null,
+          attendantId: 'attendant-1',
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+      ];
+
+      jest.spyOn(listExamsUseCase, 'execute').mockResolvedValue(expectedExams);
+
+      const result = await examController.list(user);
+
+      expect(listExamsUseCase.execute).toHaveBeenCalledWith(user.role);
+      expect(result).toEqual(expectedExams);
     });
   });
 });
