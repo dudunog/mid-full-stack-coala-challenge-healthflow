@@ -38,6 +38,11 @@ export class LoginUseCase {
 
     return {
       access_token: token,
+      user: {
+        id: user.id,
+        email: user.email,
+        role: user.role,
+      },
     };
   }
 }

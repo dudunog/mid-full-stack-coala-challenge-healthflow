@@ -1,0 +1,16 @@
+.container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #ffffff;
+  padding: 2rem 0;
+}
+
+.paper {
+  padding: 2rem;
+  width: 100%;
+  max-width: 450px;
+  background-color: transparent;
+  box-shadow: none !important;
+}
