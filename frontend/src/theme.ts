@@ -39,7 +39,7 @@ const theme = createTheme({
     },
   },
   typography: {
-    fontFamily: "var(--font-roboto), Arial, Helvetica, sans-serif",
+    fontFamily: "var(--font-outfit), Arial, Helvetica, sans-serif",
     h1: {
       fontWeight: 700,
     },

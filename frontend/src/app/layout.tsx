@@ -1,19 +1,20 @@
 import type { Metadata } from "next";
-import { Roboto } from "next/font/google";
-import { AppRouterCacheProvider } from "@mui/material-nextjs/v16-appRouter";
+import { Outfit } from "next/font/google";
 import { ThemeProvider } from "@mui/material/styles";
+import { AppRouterCacheProvider } from "@mui/material-nextjs/v16-appRouter";
 import theme from "@/theme";
 
 import "./globals.css";
 
-const roboto = Roboto({
-  variable: "--font-roboto",
+const outfitSans = Outfit({
+  variable: "--font-outfit",
   subsets: ["latin"],
 });
 
 export const metadata: Metadata = {
-  title: "HealthFlow",
-  description: "HealthFlow",
+  title: "HealthFlow - Coala Saúde",
+  description:
+    "Uma plataforma para gerenciar o processamento e laudo de exames de imagem médica.",
 };
 
 export default function RootLayout({
@@ -23,7 +24,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={roboto.variable}>
+      <body className={outfitSans.variable}>
         <AppRouterCacheProvider>
           <ThemeProvider theme={theme}>{children}</ThemeProvider>
         </AppRouterCacheProvider>
