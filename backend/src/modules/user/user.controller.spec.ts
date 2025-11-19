@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
+import { Role } from '@prisma/client';
 import { UserController } from './user.controller';
 import { CreateUserUseCase } from './use-cases/create-user.use-case';
-import { Role } from '@prisma/client';
 
 describe('UserController', () => {
   let userController: UserController;

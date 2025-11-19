@@ -1,8 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
+import { ExamStatus } from '@prisma/client';
 import { CreateExamUseCase } from './create-exam.use-case';
 import { ExamService } from 'src/modules/exam/exam.service';
 import { RabbitMQService } from 'src/modules/exam/services/rabbitmq.service';
-import { ExamStatus } from '@prisma/client';
 
 describe('CreateExamUseCase', () => {
   let createExamUseCase: CreateExamUseCase;

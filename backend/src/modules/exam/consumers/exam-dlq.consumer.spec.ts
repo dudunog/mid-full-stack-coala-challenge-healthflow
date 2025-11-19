@@ -1,8 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
+import { ExamStatus } from '@prisma/client';
 import { ExamDLQConsumer } from './exam-dlq.consumer';
 import { ExamService } from 'src/modules/exam/exam.service';
 import { RabbitMQService } from 'src/modules/exam/services/rabbitmq.service';
-import { ExamStatus } from '@prisma/client';
 
 describe('ExamDLQConsumer', () => {
   let examDLQConsumer: ExamDLQConsumer;

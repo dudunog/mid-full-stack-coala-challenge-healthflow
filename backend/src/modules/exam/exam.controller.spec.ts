@@ -1,9 +1,9 @@
 import { Test, TestingModule } from '@nestjs/testing';
+import { Role, ExamStatus } from '@prisma/client';
 import { ExamController } from './exam.controller';
 import { CreateExamUseCase } from './use-cases/create-exam.use-case';
 import { CreateReportUseCase } from './use-cases/create-report.use-case';
 import { ListExamsUseCase } from './use-cases/list-exams.use-case';
-import { Role, ExamStatus } from '@prisma/client';
 
 describe('ExamController', () => {
   let examController: ExamController;
