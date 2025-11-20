@@ -105,17 +105,23 @@ export class RabbitMQService implements OnModuleInit, OnModuleDestroy {
   async publish(
     queueName: string,
     message: unknown,
-    options?: amqp.Options.Publish,
+    options?: amqp.Options.Publish & { dlqName?: string },
   ): Promise<void> {
     const channel = this.ensureChannel();
 
     try {
-      await this.assertQueue(queueName);
+      const { dlqName, ...publishOptions } = options || {};
+
+      if (dlqName) {
+        await this.assertQueueWithDLQ(queueName, dlqName);
+      } else {
+        await this.assertQueue(queueName);
+      }
 
       const messageBuffer = Buffer.from(JSON.stringify(message));
       const sent = channel.sendToQueue(queueName, messageBuffer, {
         persistent: true,
-        ...options,
+        ...publishOptions,
       });
 
       if (!sent) {

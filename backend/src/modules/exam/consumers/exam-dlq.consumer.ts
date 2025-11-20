@@ -11,6 +11,7 @@ type ExamProcessingMessage = {
 @Injectable()
 export class ExamDLQConsumer implements OnModuleInit {
   private readonly logger = new Logger(ExamDLQConsumer.name);
+  private readonly queueName = 'exam_processing_queue';
   private readonly dlqName = 'exam_processing_queue_dlq';
   private readonly maxRetries = 3;
 
@@ -85,10 +86,16 @@ export class ExamDLQConsumer implements OnModuleInit {
         data: { status: ExamStatus.PENDING },
       });
 
-      await this.rabbitMQService.publish('exam_processing_queue', {
-        examId,
-        retryCount: retryCount + 1,
-      });
+      await this.rabbitMQService.publish(
+        this.queueName,
+        {
+          examId,
+          retryCount: retryCount + 1,
+        },
+        {
+          dlqName: this.dlqName,
+        },
+      );
 
       this.logger.log(
         `Exam ${examId} re-queued for processing (retry ${retryCount + 1})`,
