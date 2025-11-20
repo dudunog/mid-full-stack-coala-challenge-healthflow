@@ -1,0 +1,39 @@
+.header {
+  box-shadow: none;
+}
+
+.toolbar {
+  display: flex;
+  justify-content: space-between;
+  padding-top: 12px;
+  padding-bottom: 12px;
+}
+
+.logoContainer {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.logoWrapper {
+  display: flex;
+  align-items: center;
+  height: 32px;
+}
+
+.logoWrapper a {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  text-decoration: none;
+}
+
+.userInfoContainer {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.userInfo {
+  text-align: right;
+}

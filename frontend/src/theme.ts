@@ -5,10 +5,11 @@ import { createTheme } from "@mui/material/styles";
 const coalaColors = {
   primary: "#6A3AB2",
   secondary: "#FEE500",
+  tertiary: "#F4679D",
   gradientStart: "#FF69B4",
   gradientEnd: "#FF8C00",
   background: "#FFFFFF",
-  text: "#171717",
+  text: "#64748b",
 };
 
 const theme = createTheme({
@@ -28,6 +29,12 @@ const theme = createTheme({
       light: "#FFEB3B",
       dark: "#FBC02D",
       contrastText: "#171717",
+    },
+    tertiary: {
+      main: coalaColors.tertiary,
+      light: "#F4679D",
+      dark: "#F4679D",
+      contrastText: "#FFFFFF",
     },
     background: {
       default: coalaColors.background,
