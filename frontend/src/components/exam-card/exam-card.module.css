@@ -1,0 +1,99 @@
+.card {
+  position: relative;
+  padding: 16px;
+  border-radius: 12px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+}
+
+.card::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 6px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 12px;
+}
+
+.examInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.examTitle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+}
+
+.examId {
+  font-family: "SF Mono", "Roboto Mono", monospace;
+  border-radius: 4px;
+  width: fit-content;
+}
+
+.statusChip {
+  font-weight: 600;
+  border-radius: 8px;
+}
+
+.metaItem {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-bottom: 12px;
+}
+
+.metaLabel {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  line-height: 1.5;
+  display: flex;
+  align-items: center;
+}
+
+.metaValue {
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.section {
+  margin-top: 12px;
+}
+
+.section:first-of-type {
+  margin-top: 0;
+}
+
+.sectionTitle {
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.resultBox {
+  padding: 12px;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+.reportBox {
+  padding: 12px;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  line-height: 1.5;
+}

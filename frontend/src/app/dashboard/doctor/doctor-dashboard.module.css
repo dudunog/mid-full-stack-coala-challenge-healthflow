@@ -1,0 +1,22 @@
+.loadingContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 64px;
+}
+
+.emptyState {
+  padding: 48px;
+  text-align: center;
+  border-radius: 8px;
+}
+
+.emptyStateMessage {
+  margin-top: 8px;
+}
+
+.examsContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}

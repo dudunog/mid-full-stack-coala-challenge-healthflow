@@ -1,0 +1,50 @@
+.container {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+  margin-bottom: 32px;
+}
+
+@media (min-width: 600px) {
+  .container {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 900px) {
+  .container {
+    grid-template-columns: repeat(5, 1fr);
+  }
+}
+
+.card {
+  padding: 20px;
+  border-top: 4px solid;
+}
+
+.cardContent {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.icon {
+  font-size: 48px;
+}
+
+.cardTextColumn {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  flex: 1;
+}
+
+.countText {
+  font-weight: 700;
+  margin: 0;
+  line-height: 1;
+}
+
+.labelText {
+  margin: 0;
+}
