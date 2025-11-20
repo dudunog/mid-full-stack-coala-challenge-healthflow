@@ -1,42 +1,41 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import {
   Container,
   Typography,
   Box,
+  Paper,
   Alert,
   Snackbar,
-  Paper,
+  CircularProgress,
 } from "@mui/material";
-
-import { ExamList } from "@/components/exam-list/exam-list";
 import { AppHeader } from "@/components/app-header/app-header";
-import { ExamUploadZone } from "@/components/exam-upload-zone";
 import { useExams } from "@/modules/exam/hooks/use-exams.hook";
-import { StatsCards } from "@/modules/exam/components/stats-cards/stats-cards";
+import { ExamCardWithReport } from "@/modules/exam/components/exam-card-with-report/exam-card-with-report";
 
-export default function AttendantDashboard() {
-  const [uploadSuccess, setUploadSuccess] = useState(false);
+import styles from "./doctor-dashboard.module.css";
+
+export default function DoctorDashboard() {
+  const [reportSuccess, setReportSuccess] = useState(false);
   const { exams, loading, error, refetch } = useExams({
     pollingInterval: 5000,
     enabled: true,
   });
 
-  const handleUploadSuccess = () => {
-    setUploadSuccess(true);
+  const doneExams = useMemo(
+    () => exams.filter((exam) => exam.status === "DONE"),
+    [exams]
+  );
+
+  const handleReportSuccess = () => {
+    setReportSuccess(true);
     refetch();
   };
 
   const handleCloseSnackbar = () => {
-    setUploadSuccess(false);
+    setReportSuccess(false);
   };
-
-  const pendingCount = exams.filter((e) => e.status === "PENDING").length;
-  const processingCount = exams.filter((e) => e.status === "PROCESSING").length;
-  const doneCount = exams.filter((e) => e.status === "DONE").length;
-  const errorCount = exams.filter((e) => e.status === "ERROR").length;
-  const reportedCount = exams.filter((e) => e.status === "REPORTED").length;
 
   return (
     <Box sx={{ minHeight: "100vh", backgroundColor: "background.default" }}>
@@ -50,35 +49,16 @@ export default function AttendantDashboard() {
             color="primary"
             fontWeight={700}
           >
-            Dashboard
+            Fila de Trabalho
           </Typography>
           <Typography variant="body1" color="textPrimary">
-            Gerencie e acompanhe o progresso dos exames cadastrados
+            Exames processados aguardando laudo médico
           </Typography>
         </Box>
-
-        <StatsCards
-          pendingCount={pendingCount}
-          processingCount={processingCount}
-          doneCount={doneCount}
-          errorCount={errorCount}
-          reportedCount={reportedCount}
-        />
-
-        <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 3 }}>
-          <Typography variant="h5" fontWeight={600} color="text.primary">
-            Upload de Exame
-          </Typography>
-        </Box>
-        <ExamUploadZone
-          onUploadSuccess={handleUploadSuccess}
-          onUploadError={(error) => console.error("Upload error:", error)}
-        />
 
         <Paper
           elevation={2}
           sx={{
-            mt: 4,
             p: 2,
             backgroundColor: "background.paper",
             borderRadius: 3,
@@ -97,24 +77,52 @@ export default function AttendantDashboard() {
               }}
             >
               <Typography variant="body2" fontWeight={600} color="text">
-                <strong>{exams.length}</strong>{" "}
-                {exams.length === 1 ? "exame" : "exames"}
+                <strong>{doneExams.length}</strong>{" "}
+                {doneExams.length === 1 ? "exame" : "exames"}
               </Typography>
             </Box>
           </Box>
+
           {error && (
             <Alert severity="error" sx={{ mb: 2 }}>
               {error}
             </Alert>
           )}
-          <ExamList exams={exams} loading={loading} />
+
+          {loading && doneExams.length === 0 ? (
+            <Box className={styles.loadingContainer}>
+              <CircularProgress />
+            </Box>
+          ) : doneExams.length === 0 ? (
+            <Paper
+              className={styles.emptyState}
+              sx={{
+                backgroundColor: "action.hover",
+              }}
+            >
+              <Typography variant="body1" color="text.secondary">
+                Nenhum exame aguardando laudo no momento
+              </Typography>
+            </Paper>
+          ) : (
+            <Box className={styles.examsContainer}>
+              {doneExams.map((exam, index) => (
+                <ExamCardWithReport
+                  key={exam.id}
+                  exam={exam}
+                  index={index}
+                  onReportSuccess={handleReportSuccess}
+                />
+              ))}
+            </Box>
+          )}
         </Paper>
 
         <Snackbar
-          open={uploadSuccess}
+          open={reportSuccess}
           autoHideDuration={4000}
           onClose={handleCloseSnackbar}
-          message="Exame cadastrado com sucesso!"
+          message="Laudo submetido com sucesso!"
           anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
         />
       </Container>

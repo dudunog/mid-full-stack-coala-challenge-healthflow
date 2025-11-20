@@ -3,7 +3,8 @@
 import type { MedicalExam } from "@/app/types/exam";
 
 import { useState, useEffect, useCallback } from "react";
-import { listExams } from "@/lib/services/exam/exam.service";
+
+import { listExams } from "@/lib/services/exam/list-exams.service";
 
 type UseExamsOptions = {
   pollingInterval?: number;

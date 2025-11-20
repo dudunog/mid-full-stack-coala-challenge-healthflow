@@ -8,11 +8,14 @@ import {
   Alert,
   CircularProgress,
   Fade,
+  alpha,
 } from "@mui/material";
+
+import type { ApiError } from "@/lib/http-client";
+import { uploadExam } from "@/lib/services/exam/upload-exam.service";
+
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-import { uploadExam } from "@/lib/services/exam/exam.service";
-import type { ApiError } from "@/lib/http-client";
 
 type Props = {
   onUploadSuccess?: () => void;
@@ -38,7 +41,6 @@ export function ExamUploadZone({ onUploadSuccess, onUploadError }: Props) {
       setUploadSuccess(true);
       onUploadSuccess?.();
 
-      // Reset after showing success
       setTimeout(() => {
         setUploadSuccess(false);
         setFileName(null);
@@ -123,8 +125,8 @@ export function ExamUploadZone({ onUploadSuccess, onUploadError }: Props) {
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
         onClick={handleFileSelect}
-        sx={{
-          border: "3px dashed",
+        sx={(theme) => ({
+          border: uploadSuccess ? "none" : "3px dashed",
           borderColor: "primary.main",
           borderRadius: 4,
           p: 6,
@@ -132,20 +134,20 @@ export function ExamUploadZone({ onUploadSuccess, onUploadError }: Props) {
           cursor: isUploading ? "wait" : "pointer",
           transition: "all 0.2s ease",
           backgroundColor: isDragging
-            ? "rgba(106, 58, 178, 0.04)"
+            ? alpha(theme.palette.primary.main, 0.04)
             : uploadSuccess
-            ? "rgba(76, 175, 80, 0.04)"
-            : "rgba(106, 58, 178, 0.02)",
+            ? alpha(theme.palette.success.main, 0.04)
+            : alpha(theme.palette.primary.main, 0.02),
           position: "relative",
           overflow: "hidden",
           "&:hover": {
             borderColor: "primary.main",
             backgroundColor: isUploading
-              ? "rgba(106, 58, 178, 0.02)"
-              : "rgba(106, 58, 178, 0.06)",
+              ? alpha(theme.palette.primary.main, 0.02)
+              : alpha(theme.palette.primary.main, 0.06),
             boxShadow: isUploading ? 1 : 2,
           },
-        }}
+        })}
       >
         <input
           ref={fileInputRef}
@@ -345,15 +347,21 @@ export function ExamUploadZone({ onUploadSuccess, onUploadError }: Props) {
             <CheckCircleIcon
               sx={{
                 fontSize: 80,
-                color: "success.main",
+                color: "success.contrastText",
                 mb: 2,
               }}
             />
-            <Typography variant="h6" color="success.dark" fontWeight={600}>
+            <Typography
+              variant="h6"
+              sx={{ color: "success.contrastText", fontWeight: 600 }}
+            >
               Upload realizado com sucesso!
             </Typography>
             {fileName && (
-              <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
+              <Typography
+                variant="body2"
+                sx={{ color: "success.contrastText", mt: 1 }}
+              >
                 {fileName}
               </Typography>
             )}

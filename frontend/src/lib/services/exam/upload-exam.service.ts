@@ -11,13 +11,3 @@ export async function uploadExam(): Promise<MedicalExam> {
     method: "POST",
   });
 }
-
-/**
- * List all exams (for ATTENDANT) or only DONE exams (for DOCTOR)
- * @returns Array of exams
- */
-export async function listExams(): Promise<MedicalExam[]> {
-  return httpClient<MedicalExam[]>("/exams", {
-    method: "GET",
-  });
-}

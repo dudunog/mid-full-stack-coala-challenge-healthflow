@@ -1,13 +1,15 @@
 import type { MedicalExam, ExamStatus } from "@/app/types/exam";
+
 import { Box, Paper, Typography, Chip } from "@mui/material";
-import { formatDate, getTimeAgo } from "@/lib/utils/date.utils";
+
+import { formatDate } from "@/lib/utils/date.utils";
 import ErrorIcon from "@mui/icons-material/Error";
 import PendingIcon from "@mui/icons-material/Pending";
+import ArticleIcon from "@mui/icons-material/Article";
 import AutorenewIcon from "@mui/icons-material/Autorenew";
 import DescriptionIcon from "@mui/icons-material/Description";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
-import ArticleIcon from "@mui/icons-material/Article";
 
 import styles from "./exam-card.module.css";
 
@@ -58,25 +60,25 @@ const statusConfig: Record<
   },
 };
 
+const getStatusBorderColor = (status: ExamStatus) => {
+  switch (status) {
+    case "PENDING":
+      return "grey.400";
+    case "PROCESSING":
+      return "info.main";
+    case "DONE":
+      return "success.main";
+    case "ERROR":
+      return "error.main";
+    case "REPORTED":
+      return "primary.main";
+    default:
+      return "grey.400";
+  }
+};
+
 export function ExamCard({ exam, index }: Props) {
   const status = statusConfig[exam.status];
-
-  const getStatusBorderColor = () => {
-    switch (exam.status) {
-      case "PENDING":
-        return "grey.400";
-      case "PROCESSING":
-        return "info.main";
-      case "DONE":
-        return "success.main";
-      case "ERROR":
-        return "error.main";
-      case "REPORTED":
-        return "primary.main";
-      default:
-        return "grey.400";
-    }
-  };
 
   return (
     <Paper
@@ -91,7 +93,7 @@ export function ExamCard({ exam, index }: Props) {
           boxShadow: 4,
         },
         "&::before": {
-          backgroundColor: getStatusBorderColor(),
+          backgroundColor: getStatusBorderColor(exam.status),
         },
       }}
     >
@@ -120,17 +122,25 @@ export function ExamCard({ exam, index }: Props) {
       </Box>
 
       <Box className={styles.metaItem}>
-        <Typography
+        <Box
           className={styles.metaLabel}
           sx={{
             color: "text.secondary",
+            display: "flex",
+            alignItems: "center",
+            gap: 0.5,
           }}
         >
-          <CalendarTodayIcon
-            sx={{ fontSize: 12, mr: 0.5, verticalAlign: "middle" }}
-          />
-          Criado em {formatDate(exam.createdAt)}
-        </Typography>
+          <CalendarTodayIcon sx={{ fontSize: 15 }} />
+          <Typography
+            component="span"
+            sx={{
+              color: "text.secondary",
+            }}
+          >
+            Criado em {formatDate(exam.createdAt)}
+          </Typography>
+        </Box>
       </Box>
 
       {exam.processingResult && (
@@ -172,10 +182,11 @@ export function ExamCard({ exam, index }: Props) {
           <Box
             className={styles.reportBox}
             sx={{
+              mt: 1,
               backgroundColor: "primary.light",
               border: "1px solid",
               borderColor: "primary.main",
-              color: "primary.dark",
+              color: "white",
             }}
           >
             {exam.report}

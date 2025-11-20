@@ -1,8 +1,10 @@
 "use client";
 
 import type { MedicalExam } from "@/app/types/exam";
+
 import { Box, Paper, Typography, CircularProgress } from "@mui/material";
-import { ExamCard } from "../exam-card/exam-card";
+
+import { ExamCard } from "@/components/exam-card/exam-card";
 
 import styles from "./exam-list.module.css";
 
